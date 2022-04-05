@@ -1,0 +1,71 @@
+groups:
+- name: product_constructor_test
+  rules:  
+  - alert: HighGCdowntime
+    expr: rate(jvm_gc_pause_seconds_sum{action="end of minor GC", environment="test", application="product-constructor"}[1h]) > 0.5
+    for: 5m
+    annotations:
+      summary: "High GC downtime on {{ $labels.instance }}"
+      description: "High GC downtime on {{ $labels.instance }}"
+      
+  - alert: ConnectionAcquireTime
+    expr: hikaricp_connections_acquire_seconds_sum{application="product-constructor", environment="test"} / hikaricp_connections_acquire_seconds_count{application="product-constructor", environment="test"} > 10
+    for: 5m
+    annotations:
+      summary: "Connection time is too long {{ $labels.instance }}"
+      description: "Connection time is too long {{ $labels.instance }}"
+      
+  - alert: SystemCPUusageTooHigh
+    expr: system_cpu_usage{environment="test", application="product-constructor"} > 0.65
+    for: 5m
+    annotations:
+      summary: "System CPU usage too high {{ $labels.instance }}"
+      description: "System CPU usage too high {{ $labels.instance }}"
+      
+- name: product_constructor_demo
+  rules:  
+  - alert: HighGCdowntime
+    expr: rate(jvm_gc_pause_seconds_sum{action="end of minor GC", environment="demo", application="product-constructor"}[1h]) > 0.5
+    for: 5m
+    annotations:
+      summary: "High GC downtime on {{ $labels.instance }}"
+      description: "High GC downtime on {{ $labels.instance }}"
+      
+  - alert: ConnectionAcquireTime
+    expr: hikaricp_connections_acquire_seconds_sum{application="product-constructor", environment="demo"} / hikaricp_connections_acquire_seconds_count{application="product-constructor", environment="demo"} > 10
+    for: 5m
+    annotations:
+      summary: "Connection time is too long {{ $labels.instance }}"
+      description: "Connection time is too long {{ $labels.instance }}"
+      
+- name: product_constructor_stage
+  rules:  
+  - alert: HighGCdowntime
+    expr: rate(jvm_gc_pause_seconds_sum{action="end of minor GC", environment="stage", application="product-constructor"}[1h]) > 0.5
+    for: 5m
+    annotations:
+      summary: "High GC downtime on {{ $labels.instance }}"
+      description: "High GC downtime on {{ $labels.instance }}"
+      
+  - alert: ConnectionAcquireTime
+    expr: hikaricp_connections_acquire_seconds_sum{application="product-constructor", environment="stage"} / hikaricp_connections_acquire_seconds_count{application="product-constructor", environment="stage"} > 10
+    for: 5m
+    annotations:
+      summary: "Connection time is too long {{ $labels.instance }}"
+      description: "Connection time is too long {{ $labels.instance }}"
+      
+- name: product_constructor_prod
+  rules:  
+  - alert: HighGCdowntime
+    expr: rate(jvm_gc_pause_seconds_sum{action="end of minor GC", environment="prod", application="product-constructor"}[1h]) > 0.5
+    for: 5m
+    annotations:
+      summary: "High GC downtime on {{ $labels.instance }}"
+      description: "High GC downtime on {{ $labels.instance }}"
+      
+  - alert: ConnectionAcquireTime
+    expr: hikaricp_connections_acquire_seconds_sum{application="product-constructor", environment="prod"} / hikaricp_connections_acquire_seconds_count{application="product-constructor", environment="prod"} > 10
+    for: 5m
+    annotations:
+      summary: "Connection time is too long {{ $labels.instance }}"
+      description: "Connection time is too long {{ $labels.instance }}"

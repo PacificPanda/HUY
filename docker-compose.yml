@@ -1,0 +1,88 @@
+version: '3.7'
+
+volumes:
+    grafana_data: {}
+    prometheus_data: {}
+    alertmanager_data: {}
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    networks:
+      - monitoring    
+    deploy:
+      restart_policy:
+        delay: 10s
+        max_attempts: 10
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.external-url=http://fd-pr-01.vsk.ru:9090/'
+      - '--web.enable-lifecycle'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=90d'
+      - '--web.enable-admin-api'
+    ports:
+      - "9090:9090"
+
+  camunda-monitoring:
+    image: camunda/camunda-bpm-platform:7.7.0
+    container_name: camunda-monitoring
+    networks:
+      - monitoring
+    expose:
+      - "9010"
+        #    environment:
+        #      db_username: /run/secrets/kasko_factory_user_v0
+        #      db_password: /run/secrets/kasko_factory_passwd_v0
+        #    secrets:
+        #      - kasko_factory_user_v0
+        #      - kasko_factory_passwd_v0
+    volumes:
+      - ./camunda_monitoring/Camunda-Monitoring.jar:/camunda/configuration/userlib/Camunda-Monitoring.jar
+      - ./camunda_monitoring/metrics:/metrics
+      - ./camunda_monitoring/camunda-monitoring-beans.xml:/camunda/configuration/camunda-monitoring-beans.xml
+      - ./camunda_monitoring/default.yml:/camunda/configuration/default.yml
+    deploy:
+      restart_policy:
+        delay: 10s
+        max_attempts: 10
+        window: 120s
+      resources:
+        limits:
+          cpus: '1'
+          memory: 800m
+      
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    deploy:
+      restart_policy:
+        delay: 10s
+        max_attempts: 10
+        window: 120s
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    volumes:
+      - ./alertmanager/:/etc/alertmanager/
+      - alertmanager_data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.external-url=http://fd-pr-01.vsk.ru:9093/'
+    ports:
+      - "9093:9093"
+networks:
+  monitoring:        

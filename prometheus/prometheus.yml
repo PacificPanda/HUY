@@ -1,0 +1,426 @@
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+       - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  - "global_rules.yml"
+  - "produktovyi-khab/constructor_rules.yml"
+  - "produktovyi-khab/catalog_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+    - targets: ['localhost:9090']
+
+#################################################
+#Kasko Factory test
+  - job_name: 'kasko-factory-test'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['test.kasko-factory-camunda.apps.tst-okd.vsk.ru:443','test.kaskofactor-first-camunda.apps.tst-okd.vsk.ru:443','test.kasko-adapter-scoring-ui.apps.tst-okd.vsk.ru:443','test.kasko-adapter-stimulsoft-ui.apps.tst-okd.vsk.ru:443', 'test.kasko-adapter-sip-ui.apps.tst-okd.vsk.ru:443','test.kasko-factory-polling-ui.apps.tst-okd.vsk.ru:443', 'test.kasko-quota-ui.apps.tst-okd.vsk.ru:443', 'test.kasko-read-agreement-ui.apps.tst-okd.vsk.ru:443','test.kasko-wh-ui.apps.tst-okd.vsk.ru:443']
+      labels:
+        environment: 'test'
+#Kasko Factory stage
+  - job_name: 'kasko-factory-stage'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['stage.kasko-factory-camunda.apps.stg-okd-lan.vsk.ru:443','stage.kaskofactor-first-camunda.apps.stg-okd-lan.vsk.ru:443','stage.kasko-adapter-scoring-ui.apps.stg-okd-lan.vsk.ru:443','stage.kasko-stimulsoft-ui.apps.stg-okd-lan.vsk.ru:443','stage.kasko-adapter-sip-ui.apps.stg-okd-lan.vsk.ru:443','stage.kasko-factory-polling-ui.apps.stg-okd-lan.vsk.ru:443','stage.kasko-quota-ui.apps.stg-okd-lan.vsk.ru:443','stage.kasko-read-agreement-ui.apps.stg-okd-lan.vsk.ru:443','stage.kasko-wh-ui.apps.stg-okd-lan.vsk.ru:443']
+      labels:
+        environment: 'stage'
+#Kasko fabric prod
+  - job_name: 'kasko-factory-prod'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['prod.kasko-factory-camunda.apps.prd-okd-lan.vsk.ru:443','prod.kaskofactor-first-camunda.apps.prd-okd-lan.vsk.ru:443','prod.kasko-adapter-scoring-ui.apps.prd-okd-lan.vsk.ru:443','prod.kasko-stimulsoft-ui.apps.prd-okd-lan.vsk.ru:443','prod.kasko-adapter-sip-ui.apps.prd-okd-lan.vsk.ru:443','prod.kasko-factory-polling-ui.apps.prd-okd-lan.vsk.ru:443','prod.kasko-quota-ui.apps.prd-okd-lan.vsk.ru:443','prod.kasko-read-agreement-ui.apps.prd-okd-lan.vsk.ru:443','prod.kasko-wh-ui.apps.prd-okd-lan.vsk.ru:443']
+      labels:
+        environment: 'prod'
+
+#################################################
+#Ipoteka Factory
+#Ipoteka Factory test
+  - job_name: 'ipoteka-factory-test'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['test.ipoteka-factory-openapi.apps.tst-okd.vsk.ru:443']
+      labels:
+        environment: 'test'
+#Ipoteka Factory stage
+  - job_name: 'ipoteka-factory-stage'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['stage.ipoteka-factory-openapi.apps.stg-okd-lan.vsk.ru:443']
+      labels:
+        environment: 'stage'
+#Ipoteka Factory prod
+  - job_name: 'ipoteka-factory-prod'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['prod.ipoteka-factory-openapi.apps.prd-okd-lan.vsk.ru:443']
+      labels:
+        environment: 'prod'
+
+
+
+#################################################
+#Fifth Element test
+  - job_name: 'fifth-element-test'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['test.fifth-element-camunda.apps.tst-okd.vsk.ru:443','test.fifth-agreement-wh-ui.apps.tst-okd.vsk.ru:443','test.fifth-adp-stimulsoft-ui.apps.tst-okd.vsk.ru:443','test.fifth-adp-system-sip-ui.apps.tst-okd.vsk.ru:443','test.fifth-agreement-enum-camunda.apps.tst-okd.vsk.ru:443','test.fifth-read-agreement-ui.apps.tst-okd.vsk.ru:443','test.fifth-printformservice-ui.apps.tst-okd.vsk.ru:443']
+      labels:
+        environment: 'test'
+#Fifth Element stage
+  - job_name: 'fifth-element-stage'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['stage.fifth-element-camunda.apps.stg-okd-lan.vsk.ru:443','stage.fifth-agreement-wh-ui.apps.stg-okd-lan.vsk.ru:443','stage.fifth-adp-stimulsoft-ui.apps.stg-okd-lan.vsk.ru:443','stage.fifth-adp-system-sip-ui.apps.stg-okd-lan.vsk.ru:443','stage.fifth-agreement-enum-camunda.apps.stg-okd-lan.vsk.ru:443','stage.fifth-read-agreement-ui.apps.stg-okd-lan.vsk.ru:443','stage.fifth-printformservice-ui.apps.stg-okd-lan.vsk.ru:443']
+      labels:
+        environment: 'stage'
+#Fifth Element prod
+  - job_name: 'fifth-element-prod'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['prod.fifth-element-camunda.apps.prd-okd-lan.vsk.ru:443','prod.fifth-agreement-wh-ui.apps.prd-okd-lan.vsk.ru:443','prod.fifth-adp-stimulsoft-ui.apps.prd-okd-lan.vsk.ru:443','prod.fifth-adp-system-sip-ui.apps.prd-okd-lan.vsk.ru:443','prod.fifth-agreement-enum-camunda.apps.prd-okd-lan.vsk.ru:443','prod.fifth-read-agreement-ui.apps.prd-okd-lan.vsk.ru:443','prod.fifth-printformservice-ui.apps.prd-okd-lan.vsk.ru:443']
+      labels:
+        environment: 'prod'
+
+#################################################
+#Arm Underwriting (RMA) test
+  - job_name: 'arm-underwriting-test'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['test.employee-profile-openapi.apps.tst-okd.vsk.ru:443','test.back-for-front-openapi.apps.tst-okd.vsk.ru:443','test.vsk-portal-adapter-openapi.apps.tst-okd.vsk.ru:443','test.user-task-management-openapi.apps.tst-okd.vsk.ru:443','test-dmz.rma-rest-adapter-openapi.apps.tst-okd.vsk.ru','test.control-vsk-adapter-openapi.apps.tst-okd.vsk.ru:443','test.inspection-registry-openapi.apps.tst-okd.vsk.ru:443']
+      labels:
+        environment: 'test'
+#Arm Underwriting (RMA) stage
+  - job_name: 'arm-underwriting-stage'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['stage.employee-profile-openapi.apps.stg-okd-lan.vsk.ru:443','stage.back-for-front-openapi.apps.stg-okd-lan.vsk.ru:443','stage.vsk-portal-adapter-openapi.apps.stg-okd-lan.vsk.ru:443','stage.user-task-management-openapi.apps.stg-okd-lan.vsk.ru:443','stage-dmz.rma-rest-adapter-openapi.apps.stg-okd-dmz.vsk.ru:443','stage.control-vsk-adapter-openapi.apps.stg-okd-lan.vsk.ru:443','stage.inspection-registry-openapi.apps.stg-okd-lan.vsk.ru:443']
+      labels:
+        environment: 'stage'
+#Arm Underwriting (RMA) prod
+  - job_name: 'arm-underwriting-prod'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['prod.employee-profile-openapi.apps.prd-okd-lan.vsk.ru:443','prod.back-for-front-openapi.apps.prd-okd-lan.vsk.ru:443','prod.vsk-portal-adapter-openapi.apps.prd-okd-lan.vsk.ru:443','prod.user-task-management-openapi.apps.prd-okd-lan.vsk.ru:443','prod-dmz.rma-rest-adapter-openapi.apps.prd-okd-dmz.vsk.ru:443','prod.control-vsk-adapter-openapi.apps.prd-okd-lan.vsk.ru:443','prod.inspection-registry-openapi.apps.prd-okd-lan.vsk.ru:443']
+      labels:
+        environment: 'prod'
+
+#################################################
+#Box Product Factory  Test
+  - job_name: 'box-product-factory-test'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['test.boxproduct-factory-camunda.apps.tst-okd.vsk.ru:443','test.boxproduct-spr-adapter-ui.apps.tst-okd.vsk.ru:443']
+      labels:
+        environment: 'test'
+#Box Product Factory  Stage
+  - job_name: 'box-product-factory-stage'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['stage.boxproduct-factory-camunda.apps.stg-okd-lan.vsk.ru:443','stage.boxproduct-spr-adapter-ui.apps.stg-okd-lan.vsk.ru:443']
+      labels:
+        environment: 'stage'
+#Box Product Factory Prod
+  - job_name: 'box-product-factory-prod'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['prod.boxproduct-factory-camunda.apps.prd-okd-lan.vsk.ru:443','prod.boxproduct-spr-adapter-ui.apps.prd-okd-lan.vsk.ru:443']
+      labels:
+        environment: 'prod'
+
+#################################################
+#Arm BOS  test
+  - job_name: 'arm-bos-test'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['test.term-utm-openapi.apps.tst-okd.vsk.ru','test.term-back-for-front-openapi.apps.tst-okd.vsk.ru']
+      labels:
+        environment: 'test'
+#Arm BOS (BOS) stage
+  - job_name: 'arm-bos-stage'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['stage.term-utm-openapi.apps.stg-okd-lan.vsk.ru','stage.term-back-for-front-openapi.apps.stg-okd-lan.vsk.ru']
+      labels:
+        environment: 'stage'
+#Arm BOS (BOS) prod
+  - job_name: 'arm-bos-prod'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['prod.term-back-for-front2.apps.prd-okd-lan.vsk.ru:443','prod.term-user-task-management2.apps.prd-okd-lan.vsk.ru:443']
+      labels:
+        environment: 'prod'
+
+#################################################
+#Termination test
+  - job_name: 'termination-jre-test'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['test.crypto-pro-signer2.apps.tst-okd.vsk.ru','test.personal-number-validator3.apps.tst-okd.vsk.ru','test.dadata-adapter6.apps.tst-okd.vsk.ru','test.termination-camunda3.apps.tst-okd.vsk.ru']
+      labels:
+        environment: 'test'
+  - job_name: 'termination-dotnet-test'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /metrics
+    static_configs:
+    - targets: ['test.adacta-policy-info-terminatio1.apps.tst-okd.vsk.ru','test.refund-calculation1.apps.tst-okd.vsk.ru','test.refund-calculation1.apps.tst-okd.vsk.ru','test.axapta-adapter1.apps.tst-okd.vsk.ru','test.adinsure-adapter1.apps.tst-okd.vsk.ru']
+      labels:
+        environment: 'test'
+
+#################################################
+#Termination stage
+  - job_name: 'termination-jre-stage'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['stage.crypto-pro-signer2.apps.stg-okd-lan.vsk.ru','stage.personal-number-validator3.apps.stg-okd-lan.vsk.ru','stage.dadata-adapter2.apps.stg-okd-lan.vsk.ru','stage.termination-camunda3.apps.stg-okd-lan.vsk.ru']
+      labels:
+        environment: 'stage'
+  - job_name: 'termination-dotnet-stage'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /metrics
+    static_configs:
+    - targets: ['stage.adacta-policy-info-terminatio1.apps.stg-okd-lan.vsk.ru','stage.refund-calculation9.apps.stg-okd-lan.vsk.ru','stage.axapta-adapter-grpc.apps.stg-okd-lan.vsk.ru','stage.adinsure-adapter1.apps.stg-okd-lan.vsk.ru']
+      labels:
+        environment: 'stage'
+
+#################################################
+#Termination production
+  - job_name: 'termination-jre-prod'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['prod.crypto-pro-signer2.apps.prd-okd-lan.vsk.ru','prod.personal-number-validator3.apps.prd-okd-lan.vsk.ru','prod.dadata-adapter2.apps.prd-okd-lan.vsk.ru','prod.termination-camunda3.apps.prd-okd-lan.vsk.ru']
+      labels:
+        environment: 'prod'  
+  - job_name: 'termination-dotnet-prod'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /metrics
+    static_configs:    
+    - targets: ['prod.adacta-policy-info-terminatio1.apps.prd-okd-lan.vsk.ru','prod.refund-calculation1.apps.prd-okd-lan.vsk.ru','prod.refund-calculation1.apps.prd-okd-lan.vsk.ru','prod.axapta-adapter1.apps.prd-okd-lan.vsk.ru','prod.adinsure-adapter1.apps.prd-okd-lan.vsk.ru']
+      labels:
+        environment: 'prod'
+#################################################
+#Masterperson test
+  - job_name: 'masterperson-test'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['test.masterperson-ui.apps.tst-okd.vsk.ru','test.personadapterrouter-ui.apps.tst-okd.vsk.ru','test.verifyperson-ui.apps.tst-okd.vsk.ru','test.personhistorychange-ui.apps.tst-okd.vsk.ru','test.unidentifiedperson-ui.apps.tst-okd.vsk.ru','test-dmz.loyalty-program-svoi-ui.apps.tst-okd.vsk.ru']
+      labels:
+        environment: 'test'
+
+#Masterperson stage
+  - job_name: 'masterperson-stage'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['stage.masterperson-ui.apps.stg-okd-lan.vsk.ru','stage.personadapterrouter-ui.apps.stg-okd-lan.vsk.ru','stage.verifyperson-ui.apps.stg-okd-lan.vsk.ru','stage.personhistorychange-ui.apps.stg-okd-lan.vsk.ru','stage.unidentifiedperson-ui.apps.stg-okd-lan.vsk.ru','stage-dmz.loyalty-program-svoi-ui.apps.stg-okd-dmz.vsk.ru']
+      labels:
+        environment: 'stage'
+
+#Masterperson production
+  - job_name: 'masterperson-prod'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['prod.masterperson-ui.apps.prd-okd-lan.vsk.ru','prod.personadapterrouter-ui.apps.prd-okd-lan.vsk.ru','prod.verifyperson-ui.apps.prd-okd-lan.vsk.ru','prod.personhistorychange-ui.apps.prd-okd-lan.vsk.ru','prod.unidentifiedperson-ui.apps.prd-okd-lan.vsk.ru','prod-dmz.loyalty-program-svoi-ui.apps.prd-okd-dmz.vsk.ru']
+      labels:
+        environment: 'prod'
+
+#################################################
+#ServiceHub dev
+  - job_name: 'servicehub-dev'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['dev.service-hub-med11.apps.dev-okd.vsk.ru','dev.service-hub-med3.apps.dev-okd.vsk.ru']
+      labels:
+        environment: 'dev'
+
+#ServiceHub test
+  - job_name: 'servicehub-test'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['test.smart-gate7.apps.tst-okd.vsk.ru', 'test.service-hub-auto3.apps.tst-okd.vsk.ru', 'test.service-hub-med3.apps.tst-okd.vsk.ru', 'test.entities-factory3.apps.tst-okd.vsk.ru', 'test.service-hub-common3.apps.tst-okd.vsk.ru','test.service-hub23.apps.tst-okd.vsk.ru:443','test.formalizer-adapter3.apps.tst-okd.vsk.ru:443','test.infogateway-adapter7.apps.tst-okd.vsk.ru:443','test.oisuu-adapter11.apps.tst-okd.vsk.ru','test.rest-gateway2.apps.tst-okd.vsk.ru','test.svyaznoy-gateway-new6.apps.tst-okd.vsk.ru','test.adacta-adapter-211.apps.tst-okd.vsk.ru']
+      labels:
+        environment: 'test'
+#ServiceHub stage
+  - job_name: 'servicehub-stage'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['stage.smart-gate3.apps.stg-okd-lan.vsk.ru', 'stage.service-hub-auto3.apps.stg-okd-lan.vsk.ru', 'stage.service-hub-med3.apps.stg-okd-lan.vsk.ru', 'stage.service-hub3.apps.stg-okd-lan.vsk.ru', 'stage.entities-factory3.apps.stg-okd-lan.vsk.ru', 'stage.service-hub-common3.apps.stg-okd-lan.vsk.ru','stage.service-hub3.apps.stg-okd-lan.vsk.ru:443','stage.rest-gateway2.apps.stg-okd-lan.vsk.ru:443','stage.svyaznoy-gateway2.apps.stg-okd-lan.vsk.ru:443','stage.rest-gateway2.apps.stg-okd-lan.vsk.ru:443','stage.adacta-adapter-23.apps.stg-okd-lan.vsk.ru','stage.formalizer-adapter3.apps.stg-okd-lan.vsk.ru','stage.oisuu-adapter7.apps.stg-okd-lan.vsk.ru','stage.infogateway-adapter7.apps.stg-okd-lan.vsk.ru']
+      labels:
+        environment: 'stage'
+#ServiceHub prod
+  - job_name: 'servicehub-prod'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['prod.service-hub-med3.apps.prd-okd-lan.vsk.ru', 'prod.service-hub-common3.apps.prd-okd-lan.vsk.ru','prod.service-hub3.apps.prd-okd-lan.vsk.ru:443','prod.oisuu-adapter7.apps.prd-okd-lan.vsk.ru:443','prod.svyaznoy-gateway6.apps.prd-okd-lan.vsk.ru:443','prod.rest-gateway2.apps.prd-okd-lan.vsk.ru:443','prod.oisuu-adapter7.apps.prd-okd-lan.vsk.ru','prod.infogateway-adapter7.apps.prd-okd-lan.vsk.ru','prod.formalizer-adapter3.apps.prd-okd-lan.vsk.ru','prod.adacta-adapter-23.apps.prd-okd-lan.vsk.ru','prod.entities-factory3.apps.prd-okd-lan.vsk.ru']
+      labels:
+        environment: 'prod'
+
+#################################################
+#Producthub dev
+  - job_name: 'product-hub-dev'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['dev.product-catalog-openapi.apps.dev-okd.vsk.ru:443', 'dev.product-constructor-openapi.apps.dev-okd.vsk.ru:443']
+      labels:
+        environment: 'dev'
+
+#Producthub test
+  - job_name: 'product-hub-test'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['test.product-catalog-openapi.apps.tst-okd.vsk.ru:443', 'test.product-constructor-openapi.apps.tst-okd.vsk.ru:443']
+      labels:
+        environment: 'test'
+
+#Producthub demo
+  - job_name: 'product-hub-demo'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['stage.product-catalog-openapi-demo.apps.stg-okd-lan.vsk.ru:443', 'stage.product-constructor-api-demo.apps.stg-okd-lan.vsk.ru:443']
+      labels:
+        environment: 'demo'
+
+#Producthub stage
+  - job_name: 'product-hub-stage'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['stage.product-catalog-openapi.apps.stg-okd-lan.vsk.ru:443', 'stage.product-constructor-openapi.apps.stg-okd-lan.vsk.ru:443']
+      labels:
+        environment: 'stage'
+  
+#Producthub prod
+  - job_name: 'product-hub-prod'
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /actuator/prometheus
+    static_configs:
+    - targets: ['prod.product-catalog-openapi.apps.prd-okd-lan.vsk.ru:443', 'prod.product-constructor-openapi.apps.prd-okd-lan.vsk.ru:443']
+      labels:
+        environment: 'prod'
+  
+#Jenkins sh-test monitoring
+  - job_name: 'jenkins'
+    metrics_path: /prometheus
+    static_configs:
+    - targets: ['sh-test-01.vsk.ru']
